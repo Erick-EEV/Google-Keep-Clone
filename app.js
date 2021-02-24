@@ -4,7 +4,7 @@ class App {
 
     this.$placeholder = document.querySelector("#placeholder");
     this.$form = document.querySelector("#form");
-    this.$notes = document.querySelector("#notes")
+    this.$notes = document.querySelector("#notes");
     this.$noteTitle = document.querySelector("#note-title");
     this.$noteText = document.querySelector("#note-text");
     this.$formButtons = document.querySelector("#form-buttons");
@@ -56,8 +56,8 @@ class App {
     const newNote = {
       title: note.title,
       text: note.text,
-      color: "white",
-      id: this.notes.length > 0 ? this.notes[this.notes.length - 1].id + 1 : 1
+      color: "#87556f",
+      id: this.notes.length > 0 ? this.notes[this.notes.length - 1].id + 1 : 1,
     };
     this.notes = [...this.notes, newNote];
     this.displayNotes();
@@ -67,7 +67,8 @@ class App {
     const hasNotes = this.notes.length > 0;
     this.$placeholder.style.display = hasNotes ? "none" : "flex";
 
-    this.$notes.innerHTML = this.notes.map((note) => `
+    this.$notes.innerHTML = this.notes.map(
+      (note) => `
         <div style="background: ${note.color};" class="note">
             <div class="${note.title && "note-title"}">${note.title}</div>
             <div class="note-text">${note.text}</div>
@@ -79,8 +80,7 @@ class App {
             </div>    
         </div>`
     );
-    }
+  }
 }
 
 new App();
-
