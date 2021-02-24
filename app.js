@@ -1,82 +1,86 @@
 class App {
-    constructor(){
-        this.note = [];
+  constructor() {
+    this.notes = [];
 
-        this.$placeholder = document.querySelector('#placeholder')
-       this.$form = document.querySelector('#form');
-       this.$noteTitle = document.querySelector('#note-title')
-       this.$noteText = document.querySelector('#note-text')
-       this.$formButtons = document.querySelector('#form-buttons')
-       this.addEventListeners();
+    this.$placeholder = document.querySelector("#placeholder");
+    this.$form = document.querySelector("#form");
+    this.$notes = document.querySelector("#notes")
+    this.$noteTitle = document.querySelector("#note-title");
+    this.$noteText = document.querySelector("#note-text");
+    this.$formButtons = document.querySelector("#form-buttons");
+    this.addEventListeners();
+  }
+
+  addEventListeners() {
+    document.body.addEventListener("click", (event) => {
+      this.handleFormClick(event);
+    });
+
+    this.$form.addEventListener("submit", (event) => {
+      event.preventDefault();
+      const title = this.$noteTitle.value;
+      const text = this.$noteText.value;
+      const hasNote = title || text;
+      if (hasNote) {
+        //addNote
+        this.addNote({ title, text });
+      } else {
+        //dont add
+      }
+    });
+  }
+
+  handleFormClick(event) {
+    const isFormClicked = this.$form.contains(event.target);
+    if (isFormClicked) {
+      //open form
+      this.openForm();
+    } else {
+      this.closeForm();
+      //clicked form
     }
+  }
 
-    addEventListeners() {
-        document.body.addEventListener('click', event => {
-            this.handleFormClick(event)
-        })
+  openForm() {
+    this.$form.classList.add("form-open");
+    this.$noteTitle.style.display = "block";
+    this.$formButtons.style.display = "block";
+  }
 
-        this.$form.addEventListener('submit', event => {
-            event.preventDefault();
-            const title = this.$noteTitle.value;
-            const text = this.$noteText.value;
-            const hasNote = title || text;
-            if (hasNote){
-                //addNote
-                this.addNote({title, text});
-            } else {
-                //dont add 
-            }
-        })
-    }
+  closeForm() {
+    this.$form.classList.remove("form-open");
+    this.$noteTitle.style.display = "none";
+    this.$formButtons.style.display = "none";
+  }
+  addNote(note) {
+    const newNote = {
+      title: note.title,
+      text: note.text,
+      color: "white",
+      id: this.notes.length > 0 ? this.notes[this.notes.length - 1].id + 1 : 1
+    };
+    this.notes = [...this.notes, newNote];
+    this.displayNotes();
+  }
 
-    handleFormClick(event) {
-        const isFormClicked = this.$form.contains(event.target);
-        if (isFormClicked) {
-            //open form
-            this.openForm()
-        } else {
-            this.closeForm()
-            //clicked form
-        }
-    }
+  displayNotes() {
+    const hasNotes = this.notes.length > 0;
+    this.$placeholder.style.display = hasNotes ? "none" : "flex";
 
-    openForm() {
-        this.$form.classList.add('form-open');
-        this.$noteTitle.style.display = "block";
-        this.$formButtons.style.display = "block"
-    }
-
-    closeForm() {
-        this.$form.classList.remove('form-open');
-        this.$noteTitle.style.display = "none";
-        this.$formButtons.style.display = "none";
-    }
-    addNote(note){
-        const newNote = {
-            title: note.title,
-            text: note.text,
-            color: 'white', 
-            id: this.notes.length > 0 ? this.notes[this.notes.length - 1].id + 1 : 1
-        };
-        this.notes = [...this.notes, newNote]
-        this.displayNotes()
-    }
-
-    displayNotes() {
-        const hasNotes = this.notes.length > 0
-        this.$placeholder.style.display = hasNotes ? 'none' : 'flex';
-        this.notes.map(note => `
-        <div style="background: ${note.color};" class="note"></div>
-        <div class="${note.title && 'note-title'}">${note.title}</div>
-        <div class="note-text">${note.text}</div>
-        <div class="toolbar-container">
-        <div class="toolbar">
-        <img class="toolbar-color" src="https://icon.now.sh/palette">
-        <img class="toolbar-delete" src="https://icon.now.sh/delete">
-        </div>
-        </div>
-        `)
+    this.$notes.innerHTML = this.notes.map((note) => `
+        <div style="background: ${note.color};" class="note">
+            <div class="${note.title && "note-title"}">${note.title}</div>
+            <div class="note-text">${note.text}</div>
+            <div class="toolbar-container">
+                <div class="toolbar">
+                    <img class="toolbar-color" src="https://icon.now.sh/palette">
+                    <img class="toolbar-delete" src="https://icon.now.sh/delete">
+                </div>
+            </div>    
+        </div>`
+    );
     }
 }
 
-new App()
+new App();
+
