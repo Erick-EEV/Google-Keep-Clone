@@ -45,12 +45,15 @@ class App {
     this.$form.classList.add("form-open");
     this.$noteTitle.style.display = "block";
     this.$formButtons.style.display = "block";
+    
   }
 
   closeForm() {
     this.$form.classList.remove("form-open");
     this.$noteTitle.style.display = "none";
     this.$formButtons.style.display = "none";
+    this.$noteText.value = "";
+    this.$noteTitle.value = "";
   }
   addNote(note) {
     const newNote = {
@@ -61,6 +64,7 @@ class App {
     };
     this.notes = [...this.notes, newNote];
     this.displayNotes();
+    this.closeForm();
   }
 
   displayNotes() {
@@ -78,7 +82,7 @@ class App {
                 </div>
             </div>    
         </div>`
-    );
+    ).join("");
     }
 }
 
