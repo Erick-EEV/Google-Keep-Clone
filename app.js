@@ -28,7 +28,26 @@ class App {
     });
 
     document.body.addEventListener("mouseover", (event) => {
-      this.openToolTip(event)
+      this.openTooltip(event)
+    })
+
+    document.body.addEventListener("mouseout", (event) => {
+      this.closeTooltip(event)
+    })
+
+    this.$colorTooltip.addEventListener("mouseover", function(){
+      this.style.display = 'flex'
+    })
+
+    this.$colorTooltip.addEventListener('mouseout', function (){
+      this.style.display = 'none'
+    })
+
+    this.$colorTooltip.addEventListener('click', event => {
+      const color = event.target.dataset.color
+    if (color){
+      this.editNoteColor(color)
+    }
     })
 
     this.$form.addEventListener("submit", (event) => {
@@ -97,12 +116,20 @@ class App {
     this.$modal.classList.toggle("open-modal");
   }
 
-  openToolTip(event){
+  openTooltip(event){
     if(!event.target.matches('.toolbar-color')) return;
-    this.id = event.target.nextElementSibling.dataset.id;
+    this.id = event.target.dataset.id;
     const noteCoords = event.target.getBoundingClientRect();
     const horizontal = noteCoords.left + window.scrollX;
-    const vertical = noteCoords.top + window.scrollY;
+    const vertical = noteCoords.top + window.scrollY - 270;
+
+    this.$colorTooltip.style.transform = `translate(${horizontal}px, ${vertical}px)`;
+    this.$colorTooltip.style.display = 'flex'
+  }
+
+  closeTooltip(event){
+    if(!event.target.matches('.toolbar-color')) return;
+    this.$colorTooltip.style.display = 'none';
   }
 
   addNote({ title, text }) {
@@ -124,6 +151,13 @@ class App {
       note.id === Number(this.id) ? { ...note, title, text } : note
     );
     this.displayNotes();
+  }
+
+  editNoteColor(color) {
+    this.notes = this.notes.map((note) =>
+    note.id === Number(this.id) ? { ...note, color } : note
+  );
+  this.displayNotes();
   }
 
   selectNote(event) {
@@ -149,7 +183,7 @@ class App {
             <div class="note-text">${note.text}</div>
             <div class="toolbar-container">
                 <div class="toolbar">
-                    <img class="toolbar-color" src="https://icon.now.sh/palette">
+                    <img class="toolbar-color" data-id=${note.id} src="https://icon.now.sh/palette">
                     <img class="toolbar-delete" src="https://icon.now.sh/delete">
                 </div>
             </div>    
