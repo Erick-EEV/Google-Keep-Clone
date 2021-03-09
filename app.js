@@ -16,6 +16,7 @@ class App {
     this.$modalTitle = document.querySelector(".modal-title");
     this.$modalText = document.querySelector(".modal-text");
     this.$modalCloseButton = document.querySelector(".modal-close-button");
+    this.$colorTooltip = document.querySelector("#color-tooltip")
     this.addEventListeners();
   }
 
@@ -25,6 +26,10 @@ class App {
       this.selectNote(event);
       this.openModal(event);
     });
+
+    document.body.addEventListener("mouseover", (event) => {
+      this.openToolTip(event)
+    })
 
     this.$form.addEventListener("submit", (event) => {
       event.preventDefault();
@@ -90,6 +95,14 @@ class App {
   closeModal(event) {
     this.editNote();
     this.$modal.classList.toggle("open-modal");
+  }
+
+  openToolTip(event){
+    if(!event.target.matches('.toolbar-color')) return;
+    this.id = event.target.nextElementSibling.dataset.id;
+    const noteCoords = event.target.getBoundingClientRect();
+    const horizontal = noteCoords.left + window.scrollX;
+    const vertical = noteCoords.top + window.scrollY;
   }
 
   addNote({ title, text }) {
