@@ -18,7 +18,7 @@ class App {
     this.$modalCloseButton = document.querySelector(".modal-close-button");
     this.$colorTooltip = document.querySelector("#color-tooltip")
     
-    this.render()
+    this.rendercode()
     this.addEventListeners();
   }
 
